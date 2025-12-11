@@ -1,5 +1,5 @@
 <template>
-    <h3>模板语法</h3>
+    <h1>模板语法</h1>
     <div>
 
         <!-- 文本插值 -->
@@ -73,6 +73,60 @@
         <div>
             <div>v-model绑定数据：<input v-model="msg" /></div>
         </div>
+        <hr/>
+
+        <!-- v-on 事件传递方式 -->
+        <div>
+            <h4>事件传递方式：</h4>
+            <div>默认绑定：<button @click="handleClick1">按钮1</button></div>
+            <div>自定义参数：<button @click="handleClick2('msg')">按钮2</button></div>
+            <div>同时传递：<button @click="handleClick3('msg', $event)">按钮3</button></div>
+        </div>
+        <hr/>
+
+        <!-- 事件修饰符 -->
+        <div>
+            <h4>事件修饰符：</h4>
+            <div @click="changeTure">
+                <button @click.stop="stopClick">点击我（不会触发changeTure）</button>
+            </div>
+            
+            <!-- 阻止默认行为 -->
+            <div>
+                <a href="https://baidu.com" @click.prevent="changeTure">去百度</a>
+            </div>
+            
+            <!-- 修饰符链式调用 -->
+            <div @click="stopClick">
+                <a href="https://baidu.com" @click.stop.prevent="changeTure">
+                    去百度（阻止冒泡和默认行为）
+                </a>
+            </div>
+            
+            <!-- 一次性事件 -->
+            <div>
+                <button @click.once="changeTure">只能点击一次</button>
+            </div>
+        </div>
+        <hr/>
+
+        <!-- 按键修饰符 -->
+        <div>
+            <h4>按键修饰符：</h4>
+            <!-- 回车键触发 -->
+            <input @keyup.enter="keyDown('Enter')" placeholder="press Enter">
+
+            <!-- 按键别名使用 -->
+            <input @keyup.delete="keyDown('Delete')" placeholder="press Delete"> <!-- 删除键 -->
+            <input @keyup.esc="keyDown('Esc')" placeholder="press Esc">   <!-- ESC键 -->
+            <input @keyup.space="keyDown('Space')" placeholder="press Space">  <!-- 空格键 -->
+
+            <!-- 系统修饰键 -->
+            <input @keyup.ctrl.enter="keyDown('Ctrl + Enter')" placeholder="press Ctrl + Enter">     <!-- Ctrl + Enter -->
+            <input @keyup.alt.enter="keyDown('Alt + Enter')" placeholder="press Alt + Enter">      <!-- Alt + Enter -->
+            <button @click.ctrl="keyDown('Ctrl + 点击')">Ctrl + 点击</button>
+        </div>
+
     </div>
 </template>
 
@@ -99,6 +153,25 @@
         methods:{
             changeTure(){
                 this.isTrue = !this.isTrue
+            },
+            handleClick1(event){
+                console.log(event.target); // 获取触发事件的元素
+                this.isTrue = !this.isTrue
+            },
+            handleClick2(msg){
+                console.log(msg);
+                this.isTrue = !this.isTrue
+            },
+            handleClick3(msg, event){
+                console.log(msg);
+                console.log(event.target);
+                this.isTrue = !this.isTrue
+            },
+            stopClick(){
+                console.log("我在stopClick");
+            },
+            keyDown(keyboard){
+                this.msg = keyboard;
             }
         }
     }
